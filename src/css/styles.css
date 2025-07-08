@@ -1,0 +1,511 @@
+/* =====================================================
+   GLOBAL STYLES
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+/* .hidden {
+  display: none !important;
+} */
+
+input,
+button {
+    font-family: inherit;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =====================================================
+   LANDING PAGE
+===================================================== */
+
+#landing {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+}
+
+.landing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.landing-header h1 {
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.landing-header nav button {
+    margin-left: 1rem;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ff7f50;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.landing-header nav button:hover {
+    background-color: #e5673c;
+}
+
+.landing-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem 5%;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.landing-text {
+    flex: 1;
+    max-width: 500px;
+}
+
+.landing-text h2 {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    color: #222;
+}
+
+.landing-text p {
+    font-size: 1.1rem;
+    color: #444;
+    line-height: 1.6;
+}
+
+.landing-cta {
+    margin-top: 2rem;
+}
+
+.landing-cta button {
+    margin-right: 1rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+#cta-login {
+    background-color: #6c63ff;
+    color: white;
+}
+
+#cta-login:hover {
+    background-color: #5249d1;
+}
+
+#cta-register {
+    background-color: #34c759;
+    color: white;
+}
+
+#cta-register:hover {
+    background-color: #28a745;
+}
+
+.landing-image {
+    flex: 1;
+    max-width: 500px;
+}
+
+.landing-image img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.landing-footer {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    color: #666;
+    font-size: 0.9rem;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+#login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(to right, #c2e9fb, #a1c4fd);
+}
+
+.login-container {
+    background: white;
+    padding: 3rem 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.login-container h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.9rem;
+    color: #333;
+}
+
+#login-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+#login-form input:focus {
+    outline: none;
+    border-color: #6c63ff;
+}
+
+#login-form button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #6c63ff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 1rem;
+}
+
+#login-form button:hover {
+    background-color: #5249d1;
+}
+
+.login-switch {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.login-switch a {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-switch a:hover {
+    text-decoration: underline;
+}
+
+/* =====================================================
+   REGISTER
+===================================================== */
+
+#register {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(to right, #d4fc79, #96e6a1);
+}
+
+.register-container {
+    background: white;
+    padding: 3rem 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.register-container h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.9rem;
+    color: #333;
+}
+
+#register-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+#register-form input:focus {
+    outline: none;
+    border-color: #34c759;
+}
+
+#register-form button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #34c759;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 1rem;
+}
+
+#register-form button:hover {
+    background-color: #28a745;
+}
+
+.register-switch {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.register-switch a {
+    color: #34c759;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-switch a:hover {
+    text-decoration: underline;
+}
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+#dashboard {
+    padding: 2rem;
+    background: linear-gradient(to right, #fdfbfb, #ebedee);
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h2 {
+    font-size: 2rem;
+    color: #333;
+}
+
+.dashboard-header button {
+    margin-left: 1rem;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#add-pet-btn {
+    background-color: #34c759;
+    color: white;
+}
+
+#add-pet-btn:hover {
+    background-color: #28a745;
+}
+
+#logout-btn {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+#logout-btn:hover {
+    background-color: #e04848;
+}
+
+.pets-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Pet Card */
+.pet-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    text-align: center;
+    animation: fadeIn 0.4s ease-in;
+}
+
+.pet-card h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    color: #222;
+}
+
+.pet-card p {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0.3rem 0;
+}
+
+.pet-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.pet-card .card-buttons {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.pet-card button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.pet-card .edit-btn {
+    background-color: #6c63ff;
+    color: white;
+}
+
+.pet-card .edit-btn:hover {
+    background-color: #5249d1;
+}
+
+.pet-card .delete-btn {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.pet-card .delete-btn:hover {
+    background-color: #e04848;
+}
+
+/* MODAL BACKDROP */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* MODAL CONTENT */
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+#pet-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+#pet-form input:focus {
+    outline: none;
+    border-color: #34c759;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+#pet-form button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#pet-form button[type="submit"] {
+    background-color: #34c759;
+    color: white;
+}
+
+#pet-form button[type="submit"]:hover {
+    background-color: #28a745;
+}
+
+#cancel-pet-form {
+    background-color: #ccc;
+    color: #333;
+}
+
+#cancel-pet-form:hover {
+    background-color: #b3b3b3;
+}
