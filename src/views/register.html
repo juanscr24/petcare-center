@@ -2,18 +2,16 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/styles.css">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <title>Register</title>
 </head>
 
 <body>
-    <!-- Vista de Registro -->
-    <section id="register" class="hidden">
+    <section id="register">
         <div class="register-container">
             <h2>Crear cuenta</h2>
-
             <form id="register-form">
                 <input type="text" id="register-name" placeholder="Nombre completo" required />
                 <input type="text" id="register-username" placeholder="Nombre de usuario" required />
@@ -22,15 +20,13 @@
                 <input type="password" id="register-password" placeholder="Contraseña" required />
                 <button type="submit">Registrarse</button>
             </form>
-
             <p class="register-switch">
                 ¿Ya tienes cuenta?
-                <a href="#" id="register-go-login">Inicia sesión</a>
+                <a href="./login.html">Inicia sesión</a>
             </p>
         </div>
     </section>
-
-
+    <script type="module" src="../js/register.js"></script>
 </body>
 
 </html>

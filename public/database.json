@@ -1,55 +1,60 @@
 {
-    "roles": [
-        {
-            "id": "3cd6",
-            "name": "worker"
-        },
-        {
-            "id": "8916",
-            "name": "customer"
-        }
-    ],
-    "users": [
-        {
-            "id": "1baf",
-            "name": "pepito",
-            "roleID": "customer",
-            "email": "pepito@gmail.com",
-            "password": "pepito123",
-            "phone": "310202020"
-        },
-        {
-            "id": "8658",
-            "name": "juan",
-            "roleID": "customer",
-            "email": "juan@gmail.com",
-            "password": "juan123",
-            "phone": "310202020"
-        }
-    ],
-    "pets": [
-        {
-            "id": "71c4",
-            "name": "roki",
-            "userId": "1baf",
-            "weight": "20 kilos",
-            "age": "2 años",
-            "breed": "criollo",
-            "notes": "muy jugueton",
-            "temperament": "pasivo"
-        },
-        {
-            "id": "8ac9",
-            "name": "hanna",
-            "userId": "8658",
-            "weight": "10 kilos",
-            "age": "10 años",
-            "breed": "beagle",
-            "notes": "muy jugueton",
-            "temperament": "pasivo"
-        }
-    ],
-    "stays" : [
-        
-    ]
+  "roles": [
+    {
+      "id": "3cd6",
+      "name": "worker"
+    },
+    {
+      "id": "8916",
+      "name": "customer"
+    }
+  ],
+  "users": [
+    {
+      "id": "9d0e",
+      "fullName": "Juan Cardona",
+      "userName": "juanscr24",
+      "email": "juanscr24@gmail.com",
+      "phone": "000000",
+      "password": "12345"
+    },
+    {
+      "id": "ba0d",
+      "fullName": "Sebastian ",
+      "userName": "juanscr24",
+      "email": "sebas@gmail.com",
+      "phone": "310000000",
+      "password": "12345"
+    }
+  ],
+  "pets": [
+    {
+      "id": "71c4",
+      "name": "roki",
+      "userId": "1baf",
+      "weight": "20 kilos",
+      "age": "2 años",
+      "breed": "criollo",
+      "notes": "muy jugueton",
+      "temperament": "pasivo"
+    },
+    {
+      "id": "8ac9",
+      "name": "hanna",
+      "userId": "8658",
+      "weight": "10 kilos",
+      "age": "10 años",
+      "breed": "beagle",
+      "notes": "muy jugueton",
+      "temperament": "pasivo"
+    },
+    {
+      "name": "Forlan",
+      "type": "Callejero",
+      "age": 22,
+      "image": "",
+      "id": "d957"
+    }
+  ],
+  "stays": []
 }

@@ -14,9 +14,9 @@ body {
     color: #333;
 }
 
-/* .hidden {
-  display: none !important;
-} */
+.hidden {
+    display: none !important;
+}
 
 input,
 button {
