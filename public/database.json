@@ -19,9 +19,9 @@
       "password": "12345"
     },
     {
-      "id": "ba0d",
+      "id": "8370",
       "fullName": "Sebastian ",
-      "userName": "juanscr24",
+      "userName": "juanscr",
       "email": "sebas@gmail.com",
       "phone": "310000000",
       "password": "12345"
@@ -29,31 +29,13 @@
   ],
   "pets": [
     {
-      "id": "71c4",
-      "name": "roki",
-      "userId": "1baf",
-      "weight": "20 kilos",
-      "age": "2 años",
-      "breed": "criollo",
-      "notes": "muy jugueton",
-      "temperament": "pasivo"
-    },
-    {
-      "id": "8ac9",
-      "name": "hanna",
-      "userId": "8658",
-      "weight": "10 kilos",
-      "age": "10 años",
-      "breed": "beagle",
-      "notes": "muy jugueton",
-      "temperament": "pasivo"
-    },
-    {
-      "name": "Forlan",
-      "type": "Callejero",
-      "age": 22,
-      "image": "",
-      "id": "d957"
+      "id": "cab6",
+      "name": "Hanna",
+      "raze": "Beagle",
+      "type": "Perros",
+      "age": 10,
+      "image": "../../public/img/perros.webp",
+      "userId": "8370"
     }
   ],
   "stays": []

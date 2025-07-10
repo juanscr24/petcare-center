@@ -10,6 +10,13 @@ const $petForm = document.getElementById('pet-form');
 const $cancelPetFormBtn = document.getElementById('cancel-pet-form');
 const $petsContainer = document.getElementById('pets-container');
 
+// Mapeo de imágenes por tipo
+const categoryImages = {
+    "Perros": "../../public/img/perros.webp",
+    "Gatos": "../../public/img/gatos.webp",
+    "default": "../../public/img/default.webp"
+};
+
 // Evento para cerrar sesión
 $logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('currentUser');
@@ -20,8 +27,6 @@ $logoutBtn.addEventListener('click', () => {
 $addPetBtn.addEventListener('click', () => {
     $petFormModal.classList.remove('hidden');
     $petForm.reset();
-
-    // Asignar submit para agregar
     $petForm.onsubmit = async (e) => {
         e.preventDefault();
         await addPet();
@@ -32,15 +37,13 @@ $addPetBtn.addEventListener('click', () => {
 $cancelPetFormBtn.addEventListener('click', () => {
     $petFormModal.classList.add('hidden');
     $petForm.reset();
-
-    // Restaurar comportamiento para agregar
     $petForm.onsubmit = async (e) => {
         e.preventDefault();
         await addPet();
     };
 });
 
-// Delegar eventos de Editar y Eliminar en el contenedor
+// Delegar eventos de Editar y Eliminar
 $petsContainer.addEventListener('click', async (e) => {
     if (e.target.classList.contains('edit-btn')) {
         const petId = e.target.dataset.id;
@@ -53,14 +56,18 @@ $petsContainer.addEventListener('click', async (e) => {
     }
 });
 
-// Función para agregar mascota
+// Agregar nueva mascota
 async function addPet() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const petType = document.getElementById('pet-type-select').value;
+    const petTypeRaze = document.getElementById('pet-type').value;
+
     const newPet = {
         name: document.getElementById('pet-name').value,
-        type: document.getElementById('pet-type').value,
+        raze: petTypeRaze,
+        type: petType,
         age: Number(document.getElementById('pet-age').value),
-        image: document.getElementById('pet-image').value,
+        image: categoryImages[petType] || categoryImages["default"],
         userId: currentUser.id
     };
 
@@ -80,7 +87,7 @@ async function addPet() {
     }
 }
 
-// Función para cargar mascotas del usuario
+// Cargar mascotas del usuario
 async function loadPets() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     try {
@@ -91,15 +98,16 @@ async function loadPets() {
             const petCard = document.createElement('div');
             petCard.classList.add('pet-card');
             petCard.innerHTML = `
-                <img src="${pet.image || 'https://via.placeholder.com/150'}" alt="Foto de la mascota" />
-                <h3>${pet.name}</h3>
-                <p><strong>Tipo:</strong> ${pet.type}</p>
-                <p><strong>Edad:</strong> ${pet.age} años</p>
-                <div class="card-buttons">
-                    <button class="edit-btn" data-id="${pet.id}">Editar</button>
-                    <button class="delete-btn" data-id="${pet.id}">Eliminar</button>
-                </div>
-            `;
+        <img src="${pet.image || 'https://via.placeholder.com/150'}" alt="Foto de la mascota" />
+        <h3>${pet.name}</h3>
+        <p><strong>Raza:</strong> ${pet.raze}</p>
+        <p><strong>Mascota:</strong> ${pet.type}</p>
+        <p><strong>Edad:</strong> ${pet.age} años</p>
+        <div class="card-buttons">
+            <button class="edit-btn" data-id="${pet.id}">Editar</button>
+            <button class="delete-btn" data-id="${pet.id}">Eliminar</button>
+        </div>
+        `;
             $petsContainer.appendChild(petCard);
         });
     } catch (error) {
@@ -107,7 +115,7 @@ async function loadPets() {
     }
 }
 
-// Función para eliminar mascota
+// Eliminar mascota
 async function handleDeletePet(petId) {
     if (!confirm('¿Seguro que quieres eliminar esta mascota?')) return;
 
@@ -125,20 +133,18 @@ async function handleDeletePet(petId) {
     }
 }
 
-// Función para editar mascota (cargar en el formulario)
+// Editar mascota (precargar formulario)
 async function handleEditPet(petId) {
     try {
         const response = await axios.get(`${endPointPets}/${petId}`);
         const pet = response.data;
 
         document.getElementById('pet-name').value = pet.name;
-        document.getElementById('pet-type').value = pet.type;
         document.getElementById('pet-age').value = pet.age;
-        document.getElementById('pet-image').value = pet.image;
+        document.getElementById('pet-type-select').value = pet.type;
 
         $petFormModal.classList.remove('hidden');
 
-        // Asignar submit para actualizar
         $petForm.onsubmit = async (e) => {
             e.preventDefault();
             await updatePet(petId);
@@ -150,13 +156,15 @@ async function handleEditPet(petId) {
     }
 }
 
-// Función para actualizar mascota
+// Actualizar mascota
 async function updatePet(petId) {
+    const petType = document.getElementById('pet-type-select').value;
+
     const updatedPet = {
         name: document.getElementById('pet-name').value,
-        type: document.getElementById('pet-type').value,
+        type: petType,
         age: Number(document.getElementById('pet-age').value),
-        image: document.getElementById('pet-image').value,
+        image: categoryImages[petType] || categoryImages["default"]
     };
 
     try {
@@ -166,7 +174,6 @@ async function updatePet(petId) {
             $petFormModal.classList.add('hidden');
             $petForm.reset();
 
-            // Restaurar submit para agregar
             $petForm.onsubmit = async (e) => {
                 e.preventDefault();
                 await addPet();

@@ -23,9 +23,13 @@
                 <h3>Agregar Nueva Mascota</h3>
                 <form id="pet-form">
                     <input type="text" id="pet-name" placeholder="Nombre de la mascota" required />
-                    <input type="text" id="pet-type" placeholder="Tipo (Ej: Perro, Gato...)" required />
+                    <input type="text" id="pet-type" placeholder="Raza" required />
                     <input type="number" id="pet-age" placeholder="Edad (años)" required min="0" />
-                    <input type="url" id="pet-image" placeholder="URL de imagen (opcional)" />
+                    <select id="pet-type-select" required>
+                        <option value="">Selecciona tipo</option>
+                        <option value="Perros">Perro</option>
+                        <option value="Gatos">Gato</option>
+                    </select>
                     <div class="form-buttons">
                         <button type="submit">Guardar</button>
                         <button type="button" id="cancel-pet-form">Cancelar</button>
