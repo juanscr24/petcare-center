@@ -9,6 +9,7 @@
       "name": "customer"
     }
   ],
+
   "users": [
     {
       "id": "9d0e",
@@ -38,6 +39,7 @@
       "userId": "8370"
     }
   ],
+  
   "stays": [
     {
       "id": "dc4f",

@@ -3,6 +3,8 @@ import { checkForDashboard, endPointPets, endPointStays } from './main.js';
 
 checkForDashboard();
 
+// Const declared bringing HTML elements
+
 const $logoutBtn = document.getElementById('logout-btn');
 const $addPetBtn = document.getElementById('add-pet-btn');
 const $petFormModal = document.getElementById('pet-form-modal');
@@ -16,22 +18,22 @@ const $stayForm = document.getElementById('stay-form');
 const $cancelStayFormBtn = document.getElementById('cancel-stay-form');
 const $staysContainer = document.getElementById('stays-container');
 
-// Mapeo de imágenes por tipo
+// Mapping images by type
 const categoryImages = {
     "Perro": "../../public/img/perros.webp",
     "Gato": "../../public/img/gatos.webp",
     "default": "../../public/img/default.webp"
 };
 
-// --- LOGOUT ---
+// LOGOUT 
 $logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('currentUser');
     window.location.href = './login.html';
 });
 
-// --- MASCOTAS ---
+// PETS
 
-// Mostrar formulario para agregar mascota
+// Show form to add pet
 $addPetBtn.addEventListener('click', () => {
     $petFormModal.classList.remove('hidden');
     $petForm.reset();
@@ -41,7 +43,7 @@ $addPetBtn.addEventListener('click', () => {
     };
 });
 
-// Cancelar formulario mascota
+// Cancel pet form
 $cancelPetFormBtn.addEventListener('click', () => {
     $petFormModal.classList.add('hidden');
     $petForm.reset();
@@ -51,7 +53,7 @@ $cancelPetFormBtn.addEventListener('click', () => {
     };
 });
 
-// Delegar eventos de Editar y Eliminar mascotas
+// Delegate Edit and Delete Pet Events
 $petsContainer.addEventListener('click', async (e) => {
     if (e.target.classList.contains('edit-btn')) {
         const petId = e.target.dataset.id;
@@ -63,7 +65,7 @@ $petsContainer.addEventListener('click', async (e) => {
     }
 });
 
-// Agregar nueva mascota
+// Add new pets
 async function addPet() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const petType = document.getElementById('pet-type-select').value;
@@ -94,7 +96,7 @@ async function addPet() {
     }
 }
 
-// Cargar mascotas del usuario
+// Upload user pets
 async function loadPets() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     try {
@@ -122,7 +124,7 @@ async function loadPets() {
     }
 }
 
-// Eliminar mascota
+//  Delete Pets
 async function handleDeletePet(petId) {
     if (!confirm('¿Seguro que quieres eliminar esta mascota?')) return;
 
@@ -131,7 +133,7 @@ async function handleDeletePet(petId) {
         if (response.status === 200 || response.status === 204) {
             alert('Mascota eliminada');
             loadPets();
-            loadStays(); // recarga estadías por si borras mascota con estadías
+            loadStays(); // Recharge stays in case you delete pets with stays
         } else {
             throw new Error('Error eliminando mascota');
         }
@@ -141,7 +143,7 @@ async function handleDeletePet(petId) {
     }
 }
 
-// Editar mascota (precargar formulario)
+// Edit pet (preload form)
 async function handleEditPet(petId) {
     try {
         const response = await axios.get(`${endPointPets}/${petId}`);
@@ -165,7 +167,7 @@ async function handleEditPet(petId) {
     }
 }
 
-// Actualizar mascota
+// Update pets
 async function updatePet(petId) {
     const petType = document.getElementById('pet-type-select').value;
 
@@ -184,7 +186,7 @@ async function updatePet(petId) {
             $petFormModal.classList.add('hidden');
             $petForm.reset();
 
-            // Volver a modo agregar mascota
+            // Return to add pet mode
             $petForm.onsubmit = async (e) => {
                 e.preventDefault();
                 await addPet();
@@ -200,9 +202,9 @@ async function updatePet(petId) {
     }
 }
 
-// --- ESTADÍAS ---
+// --- STAYS ---
 
-// Mostrar formulario para agregar estadía
+// Show form to add stay
 $addStayBtn.addEventListener('click', async () => {
     $stayFormModal.classList.remove('hidden');
     $stayForm.reset();
@@ -213,7 +215,7 @@ $addStayBtn.addEventListener('click', async () => {
     };
 });
 
-// Cancelar formulario estadía
+// Cancel stay form
 $cancelStayFormBtn.addEventListener('click', () => {
     $stayFormModal.classList.add('hidden');
     $stayForm.reset();
@@ -223,7 +225,7 @@ $cancelStayFormBtn.addEventListener('click', () => {
     };
 });
 
-// Delegar eventos para editar y eliminar estadías
+// Delegate events to edit and delete stays
 $staysContainer.addEventListener('click', async (e) => {
     const stayId = e.target.dataset.id;
 
@@ -236,7 +238,7 @@ $staysContainer.addEventListener('click', async (e) => {
     }
 });
 
-// Cargar mascotas para selector en estadía
+// Upload pets for selector during stay
 async function populatePetSelect() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     try {
@@ -251,7 +253,7 @@ async function populatePetSelect() {
     }
 }
 
-// Agregar estadía
+// Add stay
 async function addStay() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const newStay = {
@@ -282,7 +284,7 @@ async function addStay() {
     }
 }
 
-// Cargar estadías
+// Load stays
 async function loadStays() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     try {
@@ -290,7 +292,7 @@ async function loadStays() {
         $staysContainer.innerHTML = '';
 
         for (const stay of response.data) {
-            // Obtener nombre mascota para mostrar
+            // Get pet display name
             const petResponse = await axios.get(`${endPointPets}/${stay.petId}`);
             const petName = petResponse.data.name;
 
@@ -312,7 +314,7 @@ async function loadStays() {
     }
 }
 
-// Editar estadía (precargar formulario)
+// Edit stay (preload form)
 async function handleEditStay(stayId) {
     try {
         const response = await axios.get(`${endPointStays}/${stayId}`);
@@ -337,7 +339,7 @@ async function handleEditStay(stayId) {
     }
 }
 
-// Actualizar estadía
+// Update Stays
 async function updateStay(stayId) {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -361,7 +363,7 @@ async function updateStay(stayId) {
             $stayForm.reset();
             loadStays();
 
-            // Volver a modo agregar
+            // Return to add mode
             $stayForm.onsubmit = async (e) => {
                 e.preventDefault();
                 await addStay();
@@ -375,7 +377,7 @@ async function updateStay(stayId) {
     }
 }
 
-// Eliminar estadía
+// Delete stay
 async function handleDeleteStay(stayId) {
     if (!confirm('¿Seguro que quieres eliminar esta estadía?')) return;
 
@@ -393,6 +395,6 @@ async function handleDeleteStay(stayId) {
     }
 }
 
-// --- Inicializar ---
+// Initialize functions
 loadPets();
 loadStays();

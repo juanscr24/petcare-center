@@ -3,6 +3,7 @@ import { checkSesion, endPointUsers } from './main.js';
 
 checkSesion("./dashboard.html");
 
+// Const declared bringing HTML elements
 const $registerForm = document.querySelector('#register-form');
 const $fullName = document.querySelector('#register-name');
 const $userName = document.querySelector('#register-username');
@@ -10,11 +11,13 @@ const $email = document.querySelector('#register-email');
 const $phone = document.querySelector("#register-phone");
 const $password = document.querySelector('#register-password');
 
+// Function to Submit
 $registerForm.addEventListener("submit", function (e) {
     e.preventDefault();
     registerUser();
 });
 
+// Function to register 
 async function registerUser() {
     const newUser = {
         fullName: $fullName.value.trim(),
@@ -25,7 +28,7 @@ async function registerUser() {
     };
 
     try {
-        // Primero verificamos si el username o email ya existen
+        // We check if the username or email already exists
         const [userNameCheck, emailCheck] = await Promise.all([
             axios.get(`${endPointUsers}?userName=${newUser.userName}`),
             axios.get(`${endPointUsers}?email=${newUser.email}`)
@@ -41,7 +44,7 @@ async function registerUser() {
             return;
         }
 
-        // Si no existen, procedemos a crear el usuario
+        // If they do not exist, we proceed to create the user
         const response = await axios.post(endPointUsers, newUser);
         if (response.status === 201) {
             localStorage.setItem("currentUser", JSON.stringify(response.data));
