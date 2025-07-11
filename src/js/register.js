@@ -24,7 +24,8 @@ async function registerUser() {
         userName: $userName.value.trim(),
         email: $email.value.trim(),
         phone: $phone.value.trim(),
-        password: $password.value
+        password: $password.value,
+        roleId: "8916" // Asignando el rol de 'customer' por defecto
     };
 
     try {

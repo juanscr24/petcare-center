@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { checkForDashboard, endPointPets, endPointStays } from './main.js';
+import { checkForDashboard, endPointPets, endPointStays, endPointUsers } from './main.js';
 
 checkForDashboard();
 
@@ -99,11 +99,34 @@ async function addPet() {
 // Upload user pets
 async function loadPets() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
     try {
-        const response = await axios.get(`${endPointPets}?userId=${currentUser.id}`);
+        // Get all pets if you are a worker
+        const response = currentUser.roleId === "3cd6"
+            ? await axios.get(endPointPets)
+            : await axios.get(`${endPointPets}?userId=${currentUser.id}`);
+
         $petsContainer.innerHTML = '';
 
-        response.data.forEach(pet => {
+        // Don't repeat the request
+        const userCache = {};
+
+        for (const pet of response.data) {
+            let ownerName = '';
+
+            if (currentUser.roleId === "3cd6" && pet.userId) {
+                if (!userCache[pet.userId]) {
+                    try {
+                        const userResponse = await axios.get(`${endPointUsers}/${pet.userId}`);
+                        userCache[pet.userId] = userResponse.data.fullName;
+                    } catch (error) {
+                        console.warn(`No se pudo cargar el dueño de la mascota ${pet.name}`);
+                        userCache[pet.userId] = 'Desconocido';
+                    }
+                }
+                ownerName = userCache[pet.userId];
+            }
+
             const petCard = document.createElement('div');
             petCard.classList.add('pet-card');
             petCard.innerHTML = `
@@ -112,15 +135,16 @@ async function loadPets() {
                 <p><strong>Mascota:</strong> ${pet.type}</p>
                 <p><strong>Raza:</strong> ${pet.raze}</p>
                 <p><strong>Edad:</strong> ${pet.age} años</p>
+                ${ownerName ? `<p><strong>Dueño:</strong> ${ownerName}</p>` : ''}
                 <div class="card-buttons">
                     <button class="edit-btn" data-id="${pet.id}">Editar</button>
                     <button class="delete-btn" data-id="${pet.id}">Eliminar</button>
                 </div>
             `;
             $petsContainer.appendChild(petCard);
-        });
+        }
     } catch (error) {
-        console.error(error);
+        console.error('Error al cargar mascotas:', error);
     }
 }
 
@@ -133,7 +157,8 @@ async function handleDeletePet(petId) {
         if (response.status === 200 || response.status === 204) {
             alert('Mascota eliminada');
             loadPets();
-            loadStays(); // Recharge stays in case you delete pets with stays
+            // Recharge stays in case you delete pets with stays
+            loadStays(); 
         } else {
             throw new Error('Error eliminando mascota');
         }
@@ -202,7 +227,7 @@ async function updatePet(petId) {
     }
 }
 
-// --- STAYS ---
+// STAYS
 
 // Show form to add stay
 $addStayBtn.addEventListener('click', async () => {
@@ -287,14 +312,50 @@ async function addStay() {
 // Load stays
 async function loadStays() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
     try {
-        const response = await axios.get(`${endPointStays}?userId=${currentUser.id}`);
+        const response = currentUser.roleId === "3cd6"
+            ? await axios.get(endPointStays)
+            : await axios.get(`${endPointStays}?userId=${currentUser.id}`);
+
         $staysContainer.innerHTML = '';
 
+        const petCache = {};
+        const userCache = {};
+
         for (const stay of response.data) {
-            // Get pet display name
-            const petResponse = await axios.get(`${endPointPets}/${stay.petId}`);
-            const petName = petResponse.data.name;
+            let petName = 'Mascota eliminada';
+            let ownerName = '';
+
+            // Obtener nombre de la mascota si aún existe
+            if (stay.petId) {
+                if (!petCache[stay.petId]) {
+                    try {
+                        const petResponse = await axios.get(`${endPointPets}/${stay.petId}`);
+                        petCache[stay.petId] = petResponse.data;
+                    } catch (error) {
+                        petCache[stay.petId] = null;
+                    }
+                }
+
+                const pet = petCache[stay.petId];
+                if (pet) {
+                    petName = pet.name;
+
+                    // If you are worker, show me the owner name
+                    if (currentUser.roleId === "3cd6" && pet.userId) {
+                        if (!userCache[pet.userId]) {
+                            try {
+                                const userResponse = await axios.get(`${endPointUsers}/${pet.userId}`);
+                                userCache[pet.userId] = userResponse.data.fullName;
+                            } catch {
+                                userCache[pet.userId] = 'Desconocido';
+                            }
+                        }
+                        ownerName = userCache[pet.userId];
+                    }
+                }
+            }
 
             const stayDiv = document.createElement('div');
             stayDiv.classList.add('stay-card');
@@ -302,6 +363,7 @@ async function loadStays() {
                 <p><strong>${petName}</strong></p>
                 <p><strong>Desde:</strong> ${stay.startDate}</p>
                 <p><strong>Hasta:</strong> ${stay.endDate}</p>
+                ${ownerName ? `<p><strong>Dueño:</strong> ${ownerName}</p>` : ''}
                 <div class="card-buttons">
                     <button class="edit-stay-btn" data-id="${stay.id}">Editar</button>
                     <button class="delete-stay-btn" data-id="${stay.id}">Eliminar</button>
@@ -310,11 +372,11 @@ async function loadStays() {
             $staysContainer.appendChild(stayDiv);
         }
     } catch (error) {
-        console.error(error);
+        console.error('Error al cargar estadías:', error);
     }
 }
 
-// Edit stay (preload form)
+// Edit stay 
 async function handleEditStay(stayId) {
     try {
         const response = await axios.get(`${endPointStays}/${stayId}`);

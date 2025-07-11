@@ -9,44 +9,78 @@
       "name": "customer"
     }
   ],
-
   "users": [
+    {
+      "id": "8370",
+      "fullName": "Sebastian ",
+      "userName": "admin",
+      "email": "sebas@gmail.com",
+      "phone": "310000000",
+      "password": "12345",
+      "roleId": "3cd6"
+    },
     {
       "id": "9d0e",
       "fullName": "Juan Cardona",
       "userName": "juanscr24",
       "email": "juanscr24@gmail.com",
       "phone": "000000",
-      "password": "12345"
+      "password": "12345",
+      "roleId": "8916"
     },
     {
-      "id": "8370",
-      "fullName": "Sebastian ",
-      "userName": "juanscr",
-      "email": "sebas@gmail.com",
-      "phone": "310000000",
-      "password": "12345"
+      "id": "d0de",
+      "fullName": "Madrid",
+      "userName": "madrid24",
+      "email": "madrid@gmail.com",
+      "phone": "310000",
+      "password": "12345",
+      "roleId": "8916"
     }
   ],
   "pets": [
     {
-      "id": "da62",
-      "name": "Michu",
-      "type": "Gato",
-      "raze": "Gatitofish",
+      "id": "4575",
+      "name": "James ",
+      "type": "Perro",
+      "raze": "Fresh",
+      "age": 3,
+      "image": "../../public/img/perros.webp",
+      "userId": "d0de"
+    },
+    {
+      "id": "51c2",
+      "name": "Estrella",
+      "type": "Perro",
+      "raze": "Criollo",
+      "age": 6,
+      "image": "../../public/img/perros.webp",
+      "userId": "d0de"
+    },
+    {
+      "id": "ba88",
+      "name": "Hanna",
+      "type": "Perro",
+      "raze": "Beagle",
       "age": 10,
-      "image": "../../public/img/gatos.webp",
-      "userId": "8370"
+      "image": "../../public/img/perros.webp",
+      "userId": "9d0e"
     }
   ],
-  
   "stays": [
     {
-      "id": "dc4f",
+      "id": "c5c0",
       "startDate": "2025-07-12",
-      "endDate": "2025-07-15",
-      "petId": "da62",
-      "userId": "8370"
+      "endDate": "2025-07-14",
+      "petId": "4575",
+      "userId": "d0de"
+    },
+    {
+      "id": "d205",
+      "startDate": "2025-07-12",
+      "endDate": "2025-07-13",
+      "petId": "ba88",
+      "userId": "9d0e"
     }
   ]
 }
