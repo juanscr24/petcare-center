@@ -29,14 +29,22 @@
   ],
   "pets": [
     {
-      "id": "cab6",
-      "name": "Hanna",
-      "raze": "Beagle",
-      "type": "Perros",
+      "id": "da62",
+      "name": "Michu",
+      "type": "Gato",
+      "raze": "Gatitofish",
       "age": 10,
-      "image": "../../public/img/perros.webp",
+      "image": "../../public/img/gatos.webp",
       "userId": "8370"
     }
   ],
-  "stays": []
+  "stays": [
+    {
+      "id": "dc4f",
+      "startDate": "2025-07-12",
+      "endDate": "2025-07-15",
+      "petId": "da62",
+      "userId": "8370"
+    }
+  ]
 }

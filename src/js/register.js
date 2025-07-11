@@ -17,14 +17,31 @@ $registerForm.addEventListener("submit", function (e) {
 
 async function registerUser() {
     const newUser = {
-        fullName: $fullName.value,
-        userName: $userName.value,
-        email: $email.value,
-        phone: $phone.value,
+        fullName: $fullName.value.trim(),
+        userName: $userName.value.trim(),
+        email: $email.value.trim(),
+        phone: $phone.value.trim(),
         password: $password.value
     };
 
     try {
+        // Primero verificamos si el username o email ya existen
+        const [userNameCheck, emailCheck] = await Promise.all([
+            axios.get(`${endPointUsers}?userName=${newUser.userName}`),
+            axios.get(`${endPointUsers}?email=${newUser.email}`)
+        ]);
+
+        if (userNameCheck.data.length > 0) {
+            alert("El nombre de usuario ya está en uso. Por favor elige otro.");
+            return;
+        }
+
+        if (emailCheck.data.length > 0) {
+            alert("El correo electrónico ya está registrado. Por favor usa otro.");
+            return;
+        }
+
+        // Si no existen, procedemos a crear el usuario
         const response = await axios.post(endPointUsers, newUser);
         if (response.status === 201) {
             localStorage.setItem("currentUser", JSON.stringify(response.data));

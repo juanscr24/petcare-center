@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { checkForDashboard, endPointPets } from './main.js';
+import { checkForDashboard, endPointPets, endPointStays } from './main.js';
 
 checkForDashboard();
 
@@ -10,18 +10,26 @@ const $petForm = document.getElementById('pet-form');
 const $cancelPetFormBtn = document.getElementById('cancel-pet-form');
 const $petsContainer = document.getElementById('pets-container');
 
+const $addStayBtn = document.getElementById('add-stay-btn');
+const $stayFormModal = document.getElementById('stay-form-modal');
+const $stayForm = document.getElementById('stay-form');
+const $cancelStayFormBtn = document.getElementById('cancel-stay-form');
+const $staysContainer = document.getElementById('stays-container');
+
 // Mapeo de imágenes por tipo
 const categoryImages = {
-    "Perros": "../../public/img/perros.webp",
-    "Gatos": "../../public/img/gatos.webp",
+    "Perro": "../../public/img/perros.webp",
+    "Gato": "../../public/img/gatos.webp",
     "default": "../../public/img/default.webp"
 };
 
-// Evento para cerrar sesión
+// --- LOGOUT ---
 $logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('currentUser');
     window.location.href = './login.html';
 });
+
+// --- MASCOTAS ---
 
 // Mostrar formulario para agregar mascota
 $addPetBtn.addEventListener('click', () => {
@@ -33,7 +41,7 @@ $addPetBtn.addEventListener('click', () => {
     };
 });
 
-// Cancelar formulario
+// Cancelar formulario mascota
 $cancelPetFormBtn.addEventListener('click', () => {
     $petFormModal.classList.add('hidden');
     $petForm.reset();
@@ -43,13 +51,12 @@ $cancelPetFormBtn.addEventListener('click', () => {
     };
 });
 
-// Delegar eventos de Editar y Eliminar
+// Delegar eventos de Editar y Eliminar mascotas
 $petsContainer.addEventListener('click', async (e) => {
     if (e.target.classList.contains('edit-btn')) {
         const petId = e.target.dataset.id;
         handleEditPet(petId);
     }
-
     if (e.target.classList.contains('delete-btn')) {
         const petId = e.target.dataset.id;
         await handleDeletePet(petId);
@@ -64,8 +71,8 @@ async function addPet() {
 
     const newPet = {
         name: document.getElementById('pet-name').value,
-        raze: petTypeRaze,
         type: petType,
+        raze: petTypeRaze,
         age: Number(document.getElementById('pet-age').value),
         image: categoryImages[petType] || categoryImages["default"],
         userId: currentUser.id
@@ -98,16 +105,16 @@ async function loadPets() {
             const petCard = document.createElement('div');
             petCard.classList.add('pet-card');
             petCard.innerHTML = `
-        <img src="${pet.image || 'https://via.placeholder.com/150'}" alt="Foto de la mascota" />
-        <h3>${pet.name}</h3>
-        <p><strong>Raza:</strong> ${pet.raze}</p>
-        <p><strong>Mascota:</strong> ${pet.type}</p>
-        <p><strong>Edad:</strong> ${pet.age} años</p>
-        <div class="card-buttons">
-            <button class="edit-btn" data-id="${pet.id}">Editar</button>
-            <button class="delete-btn" data-id="${pet.id}">Eliminar</button>
-        </div>
-        `;
+                <img src="${pet.image || 'https://via.placeholder.com/150'}" alt="Foto de la mascota" />
+                <h3>${pet.name}</h3>
+                <p><strong>Mascota:</strong> ${pet.type}</p>
+                <p><strong>Raza:</strong> ${pet.raze}</p>
+                <p><strong>Edad:</strong> ${pet.age} años</p>
+                <div class="card-buttons">
+                    <button class="edit-btn" data-id="${pet.id}">Editar</button>
+                    <button class="delete-btn" data-id="${pet.id}">Eliminar</button>
+                </div>
+            `;
             $petsContainer.appendChild(petCard);
         });
     } catch (error) {
@@ -124,6 +131,7 @@ async function handleDeletePet(petId) {
         if (response.status === 200 || response.status === 204) {
             alert('Mascota eliminada');
             loadPets();
+            loadStays(); // recarga estadías por si borras mascota con estadías
         } else {
             throw new Error('Error eliminando mascota');
         }
@@ -142,6 +150,7 @@ async function handleEditPet(petId) {
         document.getElementById('pet-name').value = pet.name;
         document.getElementById('pet-age').value = pet.age;
         document.getElementById('pet-type-select').value = pet.type;
+        document.getElementById('pet-type').value = pet.raze;
 
         $petFormModal.classList.remove('hidden');
 
@@ -163,6 +172,7 @@ async function updatePet(petId) {
     const updatedPet = {
         name: document.getElementById('pet-name').value,
         type: petType,
+        raze: document.getElementById('pet-type').value,
         age: Number(document.getElementById('pet-age').value),
         image: categoryImages[petType] || categoryImages["default"]
     };
@@ -174,6 +184,7 @@ async function updatePet(petId) {
             $petFormModal.classList.add('hidden');
             $petForm.reset();
 
+            // Volver a modo agregar mascota
             $petForm.onsubmit = async (e) => {
                 e.preventDefault();
                 await addPet();
@@ -189,5 +200,199 @@ async function updatePet(petId) {
     }
 }
 
-// Cargar mascotas al iniciar
+// --- ESTADÍAS ---
+
+// Mostrar formulario para agregar estadía
+$addStayBtn.addEventListener('click', async () => {
+    $stayFormModal.classList.remove('hidden');
+    $stayForm.reset();
+    await populatePetSelect();
+    $stayForm.onsubmit = async (e) => {
+        e.preventDefault();
+        await addStay();
+    };
+});
+
+// Cancelar formulario estadía
+$cancelStayFormBtn.addEventListener('click', () => {
+    $stayFormModal.classList.add('hidden');
+    $stayForm.reset();
+    $stayForm.onsubmit = async (e) => {
+        e.preventDefault();
+        await addStay();
+    };
+});
+
+// Delegar eventos para editar y eliminar estadías
+$staysContainer.addEventListener('click', async (e) => {
+    const stayId = e.target.dataset.id;
+
+    if (e.target.classList.contains('edit-stay-btn')) {
+        handleEditStay(stayId);
+    }
+
+    if (e.target.classList.contains('delete-stay-btn')) {
+        await handleDeleteStay(stayId);
+    }
+});
+
+// Cargar mascotas para selector en estadía
+async function populatePetSelect() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    try {
+        const response = await axios.get(`${endPointPets}?userId=${currentUser.id}`);
+        const petSelect = document.getElementById('stay-pet-select');
+        petSelect.innerHTML = '<option value="">Selecciona una mascota</option>';
+        response.data.forEach(pet => {
+            petSelect.innerHTML += `<option value="${pet.id}">${pet.name}</option>`;
+        });
+    } catch (error) {
+        console.error('Error cargando mascotas para estadías', error);
+    }
+}
+
+// Agregar estadía
+async function addStay() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const newStay = {
+        startDate: document.getElementById('stay-start-date').value,
+        endDate: document.getElementById('stay-end-date').value,
+        petId: document.getElementById('stay-pet-select').value,
+        userId: currentUser.id
+    };
+
+    if (!newStay.petId) {
+        alert('Por favor selecciona una mascota');
+        return;
+    }
+
+    try {
+        const response = await axios.post(endPointStays, newStay);
+        if (response.status === 201) {
+            alert('Estadía agregada');
+            $stayFormModal.classList.add('hidden');
+            $stayForm.reset();
+            loadStays();
+        } else {
+            throw new Error('Error creando estadía');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Error al agregar estadía');
+    }
+}
+
+// Cargar estadías
+async function loadStays() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    try {
+        const response = await axios.get(`${endPointStays}?userId=${currentUser.id}`);
+        $staysContainer.innerHTML = '';
+
+        for (const stay of response.data) {
+            // Obtener nombre mascota para mostrar
+            const petResponse = await axios.get(`${endPointPets}/${stay.petId}`);
+            const petName = petResponse.data.name;
+
+            const stayDiv = document.createElement('div');
+            stayDiv.classList.add('stay-card');
+            stayDiv.innerHTML = `
+                <p><strong>${petName}</strong></p>
+                <p><strong>Desde:</strong> ${stay.startDate}</p>
+                <p><strong>Hasta:</strong> ${stay.endDate}</p>
+                <div class="card-buttons">
+                    <button class="edit-stay-btn" data-id="${stay.id}">Editar</button>
+                    <button class="delete-stay-btn" data-id="${stay.id}">Eliminar</button>
+                </div>
+            `;
+            $staysContainer.appendChild(stayDiv);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// Editar estadía (precargar formulario)
+async function handleEditStay(stayId) {
+    try {
+        const response = await axios.get(`${endPointStays}/${stayId}`);
+        const stay = response.data;
+
+        $stayFormModal.classList.remove('hidden');
+        $stayForm.reset();
+
+        await populatePetSelect();
+        document.getElementById('stay-pet-select').value = stay.petId;
+        document.getElementById('stay-start-date').value = stay.startDate;
+        document.getElementById('stay-end-date').value = stay.endDate;
+
+        $stayForm.onsubmit = async (e) => {
+            e.preventDefault();
+            await updateStay(stayId);
+        };
+
+    } catch (error) {
+        console.error('Error cargando estadía', error);
+        alert('No se pudo cargar la estadía');
+    }
+}
+
+// Actualizar estadía
+async function updateStay(stayId) {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    const updatedStay = {
+        startDate: document.getElementById('stay-start-date').value,
+        endDate: document.getElementById('stay-end-date').value,
+        petId: document.getElementById('stay-pet-select').value,
+        userId: currentUser.id
+    };
+
+    if (!updatedStay.petId) {
+        alert('Por favor selecciona una mascota');
+        return;
+    }
+
+    try {
+        const response = await axios.put(`${endPointStays}/${stayId}`, updatedStay);
+        if (response.status === 200) {
+            alert('Estadía actualizada');
+            $stayFormModal.classList.add('hidden');
+            $stayForm.reset();
+            loadStays();
+
+            // Volver a modo agregar
+            $stayForm.onsubmit = async (e) => {
+                e.preventDefault();
+                await addStay();
+            };
+        } else {
+            throw new Error("Error actualizando estadía");
+        }
+    } catch (error) {
+        console.error(error);
+        alert("No se pudo actualizar la estadía");
+    }
+}
+
+// Eliminar estadía
+async function handleDeleteStay(stayId) {
+    if (!confirm('¿Seguro que quieres eliminar esta estadía?')) return;
+
+    try {
+        const response = await axios.delete(`${endPointStays}/${stayId}`);
+        if (response.status === 200 || response.status === 204) {
+            alert('Estadía eliminada');
+            loadStays();
+        } else {
+            throw new Error("Error eliminando estadía");
+        }
+    } catch (error) {
+        console.error(error);
+        alert('No se pudo eliminar la estadía');
+    }
+}
+
+// --- Inicializar ---
 loadPets();
+loadStays();

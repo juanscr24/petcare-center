@@ -14,10 +14,12 @@
             <h2>Mis Mascotas</h2>
             <div>
                 <button id="add-pet-btn">Agregar Mascota</button>
+                <button id="add-stay-btn">Agregar Estadía</button>
                 <button id="logout-btn">Cerrar sesión</button>
             </div>
         </div>
 
+        <!-- Modal para mascotas -->
         <div id="pet-form-modal" class="modal hidden">
             <div class="modal-content">
                 <h3>Agregar Nueva Mascota</h3>
@@ -27,8 +29,8 @@
                     <input type="number" id="pet-age" placeholder="Edad (años)" required min="0" />
                     <select id="pet-type-select" required>
                         <option value="">Selecciona tipo</option>
-                        <option value="Perros">Perro</option>
-                        <option value="Gatos">Gato</option>
+                        <option value="Perro">Perro</option>
+                        <option value="Gato">Gato</option>
                     </select>
                     <div class="form-buttons">
                         <button type="submit">Guardar</button>
@@ -37,10 +39,37 @@
                 </form>
             </div>
         </div>
-
+        <!-- Modal para estadías -->
+        <div id="stay-form-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Registrar Estadía</h3>
+                <form id="stay-form">
+                    <label for="stay-pet-select">Mascota</label>
+                    <select id="stay-pet-select" required></select>
+                    
+                    <label for="stay-start-date">Fecha de inicio</label>
+                    <input type="date" id="stay-start-date" required />
+                    
+                    <label for="stay-end-date">Fecha de fin</label>
+                    <input type="date" id="stay-end-date" required />
+                    
+                    <div class="form-buttons">
+                        <button type="submit">Guardar</button>
+                        <button type="button" id="cancel-stay-form">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
         <div class="pets-container" id="pets-container">
             <!-- Aquí se insertarán dinámicamente las mascotas -->
         </div>
+        
+        <h2 class="estadias">Mis estadias</h2>
+        <div class="stays-container" id="stays-container">
+            <!-- Aquí se insertarán dinámicamente las estadías -->
+        </div>
+
     </section>
 
     <script type="module" src="../js/dashboard.js"></script>
